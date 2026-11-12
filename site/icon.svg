@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="BookDetective">
+  <rect width="512" height="512" rx="104" fill="#174a45"/>
+  <path d="M119 128c57-15 104-7 137 23v225c-33-30-80-38-137-23V128Zm274 0c-57-15-104-7-137 23v225c33-30 80-38 137-23V128Z" fill="#fbf8f2"/>
+  <circle cx="348" cy="205" r="56" fill="#de664c"/><path d="m388 245 48 48" stroke="#de664c" stroke-width="24" stroke-linecap="round"/>
+</svg>

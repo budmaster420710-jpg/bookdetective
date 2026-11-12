@@ -1,0 +1,20 @@
+name = "bookdetective"
+main = "src/index.js"
+compatibility_date = "2026-11-12"
+workers_dev = true
+
+[observability]
+enabled = true
+
+[observability.traces]
+enabled = true
+
+[vars]
+# Replace before deployment. Keep the exact deployed Render origin (no trailing slash).
+ALLOWED_ORIGIN = "https://REPLACE-WITH-YOUR-RENDER-SITE.onrender.com"
+PUBLIC_BASE_URL = "https://REPLACE-WITH-YOUR-WORKER.workers.dev"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bookdetective"
+database_id = "REPLACE-WITH-A-NEW-D1-DATABASE-ID"

@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: bookdetective
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: ./site
+    autoDeployTrigger: commit

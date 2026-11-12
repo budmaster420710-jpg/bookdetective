@@ -1,0 +1,12 @@
+{
+  "name": "BookDetective",
+  "short_name": "BookDetective",
+  "description": "A private reading library built from your Kindle USB metadata.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fbf8f2",
+  "theme_color": "#174a45",
+  "icons": [
+    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
