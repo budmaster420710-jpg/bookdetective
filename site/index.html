@@ -9,6 +9,7 @@
     <link rel="icon" href="icon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="features.css">
+    <link rel="stylesheet" href="dialog.css">
     <title>BookDetective — your private reading library</title>
   </head>
   <body>
@@ -73,23 +74,26 @@
       </section>
     </main>
 
-    <dialog id="book-dialog">
-      <form id="book-form" method="dialog">
-        <div class="dialog-head"><h2 id="dialog-title">Add a book</h2><button class="close" value="cancel" aria-label="Close">×</button></div>
+    <dialog id="book-dialog" aria-labelledby="dialog-title">
+      <form id="book-form" novalidate>
+        <div class="dialog-head"><div><p class="eyebrow">Personal library</p><h2 id="dialog-title">Add a book</h2><p class="dialog-copy">Save the basics now. You can return later to add a memory, rating, or notes.</p></div><button id="close-book-dialog" class="close" type="button" aria-label="Close add-book form">×</button></div>
         <input id="book-id" type="hidden">
-        <label>Title<input id="book-title" required maxlength="300"></label>
-        <label>Author <span class="hint">optional</span><input id="book-author" maxlength="200"></label>
-        <label>Shelf<select id="book-status"><option value="want-to-read">Want to read</option><option value="reading">Reading</option><option value="finished">Finished</option><option value="on-device">On device</option><option value="not-seen">Not seen on device</option></select></label>
-        <label>Amazon ID / ASIN <span class="hint">optional</span><input id="book-asin" maxlength="32" autocapitalize="characters"></label>
-        <label>My rating<select id="book-rating"><option value="0">Not rated</option><option value="5">★★★★★ — loved it</option><option value="4">★★★★ — really liked it</option><option value="3">★★★ — liked it</option><option value="2">★★ — it was okay</option><option value="1">★ — not for me</option></select></label>
-        <label>My review <span class="hint">private; kept in this browser</span><textarea id="book-review" rows="4" maxlength="2500" placeholder="What do you want to remember about this book?"></textarea></label>
-        <label>Notes <span class="hint">private; kept in this browser</span><textarea id="book-notes" rows="3" maxlength="1000"></textarea></label>
-        <div class="dialog-actions"><button class="button quiet" value="cancel">Cancel</button><button class="button primary" value="default">Save book</button></div>
+        <div class="form-grid">
+          <label class="field field-wide"><span>Title <b>Required</b></span><input id="book-title" required maxlength="300" placeholder="Book title"></label>
+          <label class="field"><span>Author <em>Optional</em></span><input id="book-author" maxlength="200" placeholder="Author name"></label>
+          <label class="field"><span>Shelf</span><select id="book-status"><option value="want-to-read">Want to read</option><option value="reading">Reading</option><option value="finished">Finished</option><option value="on-device">On device</option><option value="not-seen">Not seen on device</option></select></label>
+          <label class="field"><span>My rating</span><select id="book-rating"><option value="0">Not rated</option><option value="5">★★★★★ — loved it</option><option value="4">★★★★ — really liked it</option><option value="3">★★★ — liked it</option><option value="2">★★ — it was okay</option><option value="1">★ — not for me</option></select></label>
+          <label class="field"><span>Amazon ID / ASIN <em>Optional</em></span><input id="book-asin" maxlength="32" autocapitalize="characters" placeholder="ASIN if you have it"></label>
+          <label class="field field-wide"><span>My review <em>Private; kept in this browser</em></span><textarea id="book-review" rows="4" maxlength="2500" placeholder="What do you want to remember about this book?"></textarea></label>
+          <label class="field field-wide"><span>Notes <em>Private; kept in this browser</em></span><textarea id="book-notes" rows="3" maxlength="1000" placeholder="Favorite quotes, where you got it, anything useful…"></textarea></label>
+        </div>
+        <div class="dialog-actions"><button id="cancel-book-dialog" class="button quiet" type="button">Cancel</button><button class="button primary" type="submit">Save book</button></div>
       </form>
     </dialog>
     <dialog id="scanner-dialog">
       <div class="scanner-panel"><div class="dialog-head"><h2>Scan an ISBN barcode</h2><button class="close" type="button" aria-label="Close scanner" onclick="this.closest('dialog').close()">×</button></div><p>Point the camera at the barcode on the back of a physical book. The ISBN is saved only in this browser.</p><video id="barcode-video" playsinline muted></video><p id="scanner-status" class="hint" role="status">Starting camera…</p><form id="isbn-form" class="isbn-form"><label for="isbn-value">Or type an ISBN</label><input id="isbn-value" inputmode="numeric" autocomplete="off" placeholder="978…"><button class="button primary" type="submit">Save ISBN</button></form></div>
     </dialog>
+    <script src="dialog-controls.js"></script>
     <script type="module" src="app.js"></script>
   </body>
 </html>

@@ -1,5 +1,5 @@
-const CACHE = 'bookdetective-v2';
-const ASSETS = ['./', './index.html', './styles.css', './features.css', './app.js', './manifest.webmanifest', './icon.svg'];
+const CACHE = 'bookdetective-v3';
+const ASSETS = ['./', './index.html', './styles.css', './features.css', './dialog.css', './dialog-controls.js', './app.js', './manifest.webmanifest', './icon.svg'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS))));
 self.addEventListener('activate', event => event.waitUntil(self.clients.claim()));
 self.addEventListener('fetch', event => {
