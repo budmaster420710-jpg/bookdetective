@@ -1,0 +1,5 @@
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Refreshing BookDetective</title><meta name="theme-color" content="#174a45"><link rel="stylesheet" href="styles.css"></head>
+  <body><main class="shell"><section class="empty-state"><p class="eyebrow">BookDetective update</p><h1 style="font-size:clamp(2.5rem,10vw,4rem)">Refreshing your app…</h1><p>Your books and personal notes stay in this browser. This page only replaces an older offline screen.</p><p id="refresh-status" class="hint">Checking the installed version.</p><noscript><p>Please return to <a href="./">BookDetective</a> and refresh the page.</p></noscript></section></main><script>Promise.resolve(navigator.serviceWorker?navigator.serviceWorker.getRegistrations():[]).then(list=>Promise.all(list.map(item=>item.unregister()))).finally(()=>setTimeout(()=>location.replace('./?updated='+Date.now()),300));</script></body>
+</html>
