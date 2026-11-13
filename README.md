@@ -1,6 +1,16 @@
 # BookDetective
 
-BookDetective is a privacy-first, installable website for building a reading library from a Kindle USB import. Version one runs entirely in the browser: it never uploads book files, DRM material, Kindle databases, or cover images.
+BookDetective is a privacy-first, installable website for building a reading library and personal book-memory collection. It runs entirely in the browser: it never uploads book files, DRM material, Kindle databases, or cover images.
+
+## Personal library tools
+
+- Put every title on **Want to read**, **Reading**, **Finished**, **On device**, or **Not seen** shelves.
+- Sort by recently updated, title, author, rating, or shelf; search also checks private notes and reviews.
+- Keep a private 1–5 star rating, review, and notes for each book.
+- Paste a title, `Title — Author`, ISBN, or a book link from another app. This records only what the reader pastes; it does not sign into, scrape, or watch another account.
+- Scan a physical-book ISBN with the phone camera. Camera access is requested only after tapping **Scan a physical book**. If barcode support is unavailable, the reader can type the ISBN.
+
+All entries remain in that browser until the reader exports a BookDetective backup. Restoring that export works on another device/browser.
 
 ## What it imports
 
@@ -17,7 +27,7 @@ The app deliberately does **not** open KFX/AZW/AAX book content, DRM vouchers, o
 
 Open `site/index.html` from a static server, or point a Render Static Site at `site/`. On supported browsers, use the install action in the browser menu to add it to the home screen.
 
-No package installation or build is required.
+No package installation or build is required. When a new release is deployed, an installed phone version receives it after it is reopened or refreshed; the service-worker cache version is deliberately changed with each release.
 
 ## Optional Cloudflare Worker/D1 foundation
 

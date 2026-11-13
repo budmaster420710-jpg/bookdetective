@@ -8,6 +8,7 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="features.css">
     <title>BookDetective — your private reading library</title>
   </head>
   <body>
@@ -19,6 +20,7 @@
         <div class="hero-actions">
           <label class="button primary" for="kindle-folder">Import Kindle USB folder<input id="kindle-folder" type="file" webkitdirectory directory multiple hidden></label>
           <button id="manual-add" class="button quiet" type="button">Add a book</button>
+          <button id="scan-barcode" class="button quiet" type="button">Scan a physical book</button>
         </div>
         <p class="privacy-note">Reads names and safe sidecar metadata only. Never uploads book files, DRM, or contents.</p>
       </header>
@@ -35,11 +37,20 @@
         <div id="import-result" class="import-result" role="status">Ready when you are.</div>
       </section>
 
+      <section class="intake-card" aria-labelledby="intake-title">
+        <div><p class="eyebrow">From other reading apps</p><h2 id="intake-title">Bring a book with you</h2><p>Copy a title or shareable Kindle, Audible, Amazon, Goodreads, or library link, then paste it here. Nothing is collected in the background.</p></div>
+        <form id="quick-add-form" class="quick-add">
+          <label class="sr-only" for="quick-add-value">Book title or link</label><input id="quick-add-value" type="text" maxlength="1000" placeholder="Paste a title, author, ISBN, or book link">
+          <button class="button primary" type="submit">Add to my shelf</button>
+        </form>
+        <p id="quick-add-result" class="hint" role="status">Tip: “Title — Author” fills both fields. A saved link stays private in this browser.</p>
+      </section>
+
       <section class="metrics" aria-label="Library summary">
         <article><strong id="total-count">0</strong><span>Books tracked</span></article>
         <article><strong id="reading-count">0</strong><span>Reading now</span></article>
         <article><strong id="finished-count">0</strong><span>Finished</span></article>
-        <article><strong id="review-count">0</strong><span>Need review</span></article>
+        <article><strong id="want-count">0</strong><span>Want to read</span></article>
       </section>
 
       <section class="library" aria-labelledby="library-title">
@@ -47,7 +58,8 @@
           <div><p class="eyebrow">Your collection</p><h2 id="library-title">The case file</h2></div>
           <div class="tools">
             <label class="sr-only" for="search">Search your library</label><input id="search" type="search" placeholder="Search title or author">
-            <select id="filter" aria-label="Filter books"><option value="all">All statuses</option><option value="reading">Reading</option><option value="finished">Finished</option><option value="on-device">On device</option><option value="not-seen">Not seen on device</option><option value="review">Needs review</option></select>
+            <select id="filter" aria-label="Choose shelf"><option value="all">All shelves</option><option value="want-to-read">Want to read</option><option value="reading">Reading</option><option value="finished">Finished</option><option value="on-device">On device</option><option value="not-seen">Not seen on device</option></select>
+            <select id="sort" aria-label="Sort books"><option value="recent">Recently added</option><option value="title">Title A–Z</option><option value="author">Author A–Z</option><option value="rating">My rating</option><option value="status">Shelf</option></select>
           </div>
         </div>
         <div id="empty-state" class="empty-state"><strong>Your first case is waiting.</strong><p>Choose the connected Kindle folder to build a private catalog. Kindle titles without a reliable author will be clearly marked for your review.</p></div>
@@ -67,11 +79,16 @@
         <input id="book-id" type="hidden">
         <label>Title<input id="book-title" required maxlength="300"></label>
         <label>Author <span class="hint">optional</span><input id="book-author" maxlength="200"></label>
-        <label>Status<select id="book-status"><option value="on-device">On device</option><option value="reading">Reading</option><option value="finished">Finished</option><option value="not-seen">Not seen on device</option><option value="review">Needs review</option></select></label>
+        <label>Shelf<select id="book-status"><option value="want-to-read">Want to read</option><option value="reading">Reading</option><option value="finished">Finished</option><option value="on-device">On device</option><option value="not-seen">Not seen on device</option></select></label>
         <label>Amazon ID / ASIN <span class="hint">optional</span><input id="book-asin" maxlength="32" autocapitalize="characters"></label>
-        <label>Notes <span class="hint">kept in this browser</span><textarea id="book-notes" rows="3" maxlength="1000"></textarea></label>
+        <label>My rating<select id="book-rating"><option value="0">Not rated</option><option value="5">★★★★★ — loved it</option><option value="4">★★★★ — really liked it</option><option value="3">★★★ — liked it</option><option value="2">★★ — it was okay</option><option value="1">★ — not for me</option></select></label>
+        <label>My review <span class="hint">private; kept in this browser</span><textarea id="book-review" rows="4" maxlength="2500" placeholder="What do you want to remember about this book?"></textarea></label>
+        <label>Notes <span class="hint">private; kept in this browser</span><textarea id="book-notes" rows="3" maxlength="1000"></textarea></label>
         <div class="dialog-actions"><button class="button quiet" value="cancel">Cancel</button><button class="button primary" value="default">Save book</button></div>
       </form>
+    </dialog>
+    <dialog id="scanner-dialog">
+      <div class="scanner-panel"><div class="dialog-head"><h2>Scan an ISBN barcode</h2><button class="close" type="button" aria-label="Close scanner" onclick="this.closest('dialog').close()">×</button></div><p>Point the camera at the barcode on the back of a physical book. The ISBN is saved only in this browser.</p><video id="barcode-video" playsinline muted></video><p id="scanner-status" class="hint" role="status">Starting camera…</p><form id="isbn-form" class="isbn-form"><label for="isbn-value">Or type an ISBN</label><input id="isbn-value" inputmode="numeric" autocomplete="off" placeholder="978…"><button class="button primary" type="submit">Save ISBN</button></form></div>
     </dialog>
     <script type="module" src="app.js"></script>
   </body>
