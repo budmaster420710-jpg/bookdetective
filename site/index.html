@@ -91,9 +91,10 @@
       </form>
     </dialog>
     <dialog id="scanner-dialog">
-      <div class="scanner-panel"><div class="dialog-head"><h2>Scan an ISBN barcode</h2><button class="close" type="button" aria-label="Close scanner" onclick="this.closest('dialog').close()">×</button></div><p>Point the camera at the barcode on the back of a physical book. The ISBN is saved only in this browser.</p><video id="barcode-video" playsinline muted></video><p id="scanner-status" class="hint" role="status">Starting camera…</p><form id="isbn-form" class="isbn-form"><label for="isbn-value">Or type an ISBN</label><input id="isbn-value" inputmode="numeric" autocomplete="off" placeholder="978…"><button class="button primary" type="submit">Save ISBN</button></form></div>
+      <div class="scanner-panel"><div class="dialog-head"><h2>Scan an ISBN barcode</h2><button class="close" type="button" aria-label="Close scanner" onclick="this.closest('dialog').close()">×</button></div><p>Point the camera at the barcode on the back of a physical book. The ISBN is saved only in this browser.</p><video id="barcode-video" playsinline muted autoplay></video><p id="scanner-status" class="hint" role="status">Starting camera…</p><form id="isbn-form" class="isbn-form"><label for="isbn-value">Or type an ISBN</label><input id="isbn-value" inputmode="numeric" autocomplete="off" placeholder="978…"><button class="button primary" type="submit">Save ISBN</button></form></div>
     </dialog>
     <script src="dialog-controls.js"></script>
     <script type="module" src="app.js"></script>
+    <script src="camera-fix.js"></script>
   </body>
 </html>
