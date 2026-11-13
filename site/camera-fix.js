@@ -1,74 +1,10 @@
 (() => {
-  const scanButton = document.querySelector('#scan-barcode');
-  const dialog = document.querySelector('#scanner-dialog');
-  const video = document.querySelector('#barcode-video');
-  const status = document.querySelector('#scanner-status');
-  const isbnField = document.querySelector('#isbn-value');
-  let stream = null;
-  let scanTimer = null;
-
-  const stop = () => {
-    if (scanTimer) clearInterval(scanTimer);
-    scanTimer = null;
-    if (stream) stream.getTracks().forEach(track => track.stop());
-    stream = null;
-    video.srcObject = null;
-  };
-
-  async function requestCamera() {
-    const attempts = [
-      { video: { facingMode: { ideal: 'environment' } }, audio: false },
-      { video: true, audio: false }
-    ];
-    let lastError;
-    for (const constraints of attempts) {
-      try { return await navigator.mediaDevices.getUserMedia(constraints); }
-      catch (error) { lastError = error; }
-    }
-    throw lastError;
-  }
-
-  async function begin() {
-    if (!navigator.mediaDevices?.getUserMedia) {
-      status.textContent = 'This browser does not provide camera access here. Type the ISBN below instead.';
-      return;
-    }
-    status.textContent = 'Opening the camera…';
-    try {
-      stream = await requestCamera();
-      video.srcObject = stream;
-      video.muted = true;
-      video.playsInline = true;
-      await new Promise(resolve => video.readyState >= 2 ? resolve() : video.addEventListener('loadeddata', resolve, { once: true }));
-      try { await video.play(); } catch { /* Frame still commonly arrives on mobile after permission. */ }
-      if (!('BarcodeDetector' in window)) {
-        status.textContent = 'Camera is ready. This browser cannot read the barcode automatically, so type the ISBN below.';
-        return;
-      }
-      const detector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'isbn_10', 'isbn_13', 'upc_a'] });
-      status.textContent = 'Camera is ready. Point it at the ISBN barcode.';
-      scanTimer = setInterval(async () => {
-        try {
-          const codes = await detector.detect(video);
-          if (!codes[0]?.rawValue) return;
-          isbnField.value = codes[0].rawValue;
-          document.querySelector('#isbn-form').requestSubmit();
-        } catch { /* Try the next frame. */ }
-      }, 500);
-    } catch (error) {
-      const name = error?.name || '';
-      status.textContent = name === 'NotAllowedError'
-        ? 'Camera permission is blocked for this site. Use the browser’s site settings to allow Camera, then try again—or type the ISBN below.'
-        : name === 'NotFoundError'
-          ? 'No camera was found on this device. Type the ISBN below.'
-          : 'The camera could not start here. Type the ISBN below, or close any other app using the camera and try again.';
-    }
-  }
-
-  scanButton.addEventListener('click', event => {
-    event.stopImmediatePropagation();
-    dialog.showModal();
-    begin();
-  }, true);
-  dialog.addEventListener('close', stop);
+  const scanButton=document.querySelector('#scan-barcode'),dialog=document.querySelector('#scanner-dialog'),video=document.querySelector('#barcode-video'),status=document.querySelector('#scanner-status'),isbnField=document.querySelector('#isbn-value');
+  let stream=null,scanTimer=null,zxingControls=null;
+  const stop=()=>{clearInterval(scanTimer);scanTimer=null;zxingControls?.stop();zxingControls=null;if(stream)stream.getTracks().forEach(track=>track.stop());stream=null;video.srcObject=null;};
+  const useCode=value=>{isbnField.value=value;document.querySelector('#isbn-form').requestSubmit();};
+  async function requestCamera(){let error;for(const constraints of[{video:{facingMode:{ideal:'environment'}},audio:false},{video:true,audio:false}]){try{return await navigator.mediaDevices.getUserMedia(constraints);}catch(caught){error=caught;}}throw error;}
+  async function zxingFallback(){status.textContent='Loading the barcode reader…';try{const{BrowserMultiFormatReader}=await import('https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.5/+esm');const reader=new BrowserMultiFormatReader();zxingControls=await reader.decodeFromVideoDevice(undefined,'barcode-video',result=>{if(result?.getText())useCode(result.getText());});status.textContent='Camera is ready. Point it at the ISBN barcode.';}catch{status.textContent='Camera is ready, but this browser could not load the barcode reader. Type the ISBN below and BookDetective will look up the title.';}}
+  async function begin(){if(!navigator.mediaDevices?.getUserMedia){status.textContent='This browser does not provide camera access here. Type the ISBN below and BookDetective will look up the title.';return;}status.textContent='Opening the camera…';try{stream=await requestCamera();video.srcObject=stream;video.muted=true;video.playsInline=true;await new Promise(resolve=>video.readyState>=2?resolve():video.addEventListener('loadeddata',resolve,{once:true}));try{await video.play();}catch{}if(!('BarcodeDetector'in window)){stop();await zxingFallback();return;}const detector=new BarcodeDetector({formats:['ean_13','ean_8','isbn_10','isbn_13','upc_a']});status.textContent='Camera is ready. Point it at the ISBN barcode.';scanTimer=setInterval(async()=>{try{const codes=await detector.detect(video);if(codes[0]?.rawValue)useCode(codes[0].rawValue);}catch{}},500);}catch(error){const name=error?.name||'';status.textContent=name==='NotAllowedError'?'Camera permission is blocked for this site. Allow Camera in the browser site settings, or type the ISBN below.':name==='NotFoundError'?'No camera was found on this device. Type the ISBN below.':'The camera could not start here. Close any other app using it, then try again—or type the ISBN below.';}}
+  scanButton.addEventListener('click',event=>{event.stopImmediatePropagation();dialog.showModal();begin();},true);dialog.addEventListener('close',stop);
 })();
